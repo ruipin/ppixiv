@@ -23,12 +23,13 @@ ppixiv.screen_illust = class extends ppixiv.screen
             parent: this,
             progress_bar: this.progress_bar,
         });
-        
+
         var ui_box = this.ui.container;
 
         var ui_visibility_changed = () => {
             // Hide the dropdown tag widget when the hover UI is hidden.
-            let visible = ui_box.classList.contains("hovering-over-box") || ui_box.classList.contains("hovering-over-sphere");
+            let ui_on_hover = settings.get("ui-on-hover");
+            let visible = !ui_on_hover || ui_box.classList.contains("hovering-over-box") || ui_box.classList.contains("hovering-over-sphere");
             if(!visible)
             {
                 this.ui.bookmark_tag_widget.visible = false; // XXX remove
@@ -40,6 +41,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
         };
         ui_box.addEventListener("mouseenter", (e) => { helpers.set_class(ui_box, "hovering-over-box", true); ui_visibility_changed(); });
         ui_box.addEventListener("mouseleave", (e) => { helpers.set_class(ui_box, "hovering-over-box", false); ui_visibility_changed(); });
+        ui_visibility_changed();
 
         var hover_circle = this.container.querySelector(".ui .hover-circle");
         hover_circle.addEventListener("mouseenter", (e) => { helpers.set_class(ui_box, "hovering-over-sphere", true); ui_visibility_changed(); });
