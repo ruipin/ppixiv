@@ -832,16 +832,16 @@ ppixiv.tag_widget = class extends ppixiv.widget
         for(let tag of tag_list)
         {
             let a = this.container.appendChild(document.createElement("a"));
-            a.classList.add("tag");
+            //a.classList.add("tag");
             a.classList.add("box-link");
 
-            let popup = null;
-            let translated_tag = tag;
-            if(translated_tags[tag])
-                translated_tag = translated_tags[tag];
+            if(translated_tags[tag]) {
+                a.classList.add("popup");
+                a.dataset.popup = translated_tags[tag];
+            }
 
             a.dataset.tag = tag;
-            a.textContent = translated_tag;
+            a.textContent = tag;
 
             a.href = this.format_tag_link(tag);
         }
