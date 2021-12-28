@@ -2996,6 +2996,57 @@ ppixiv.data_sources.follows = class extends data_source
         this.add_page(page, illust_ids);
     }
 
+    // BULK PRIVATE FOLLOWS START #1
+    async set_bulk_private() {
+        const query_args = this.url.searchParams;
+
+        const url = "/ajax/user/" + this.viewing_user_id + "/following";
+
+        const BATCH_SIZE = 10;
+        let batch = [];
+
+        const process = async function(prms) {
+            batch.push(prms);
+
+            if(batch.length >= BATCH_SIZE) {
+                await Promise.race(batch);
+                batch = [];
+            }
+        };
+
+        let requestCount = 1;
+        while(true) {
+            const args = {
+                offset: 0, // Always offset 0 as we always want to bulk private from the beginning
+                limit: this.estimated_items_per_page,
+                rest: "show",
+            };
+
+            const result = await helpers.get_request(url, args);
+            if(!result || result.error) {
+                console.error("Encountered error: ", result);
+                break;
+            }
+
+            const total = result.body.total;
+
+            if(total <= 0)
+                break;
+
+            let indexInPage = 0;
+            for(let followed_user of result.body.users) {
+                console.log("Bulk private: " + (total - indexInPage) + " remaining. Updating userID " + followed_user.userId + " (request #" + requestCount + ")...");
+                await process(actions.follow(followed_user.userId, true, []));
+
+                indexInPage += 1;
+                requestCount += 1;
+            }
+        }
+
+        this.executingBulkPrivate = false;
+    }
+    // BULK PRIVATE FOLLOWS END #1
+
     refresh_thumbnail_ui(container, thumbnail_view)
     {
         if(!this.viewing_self)
@@ -3010,6 +3061,21 @@ ppixiv.data_sources.follows = class extends data_source
 
         this.set_item(container, "public-follows", {rest: "show"}, {rest: "show"});
         this.set_item(container, "private-follows", {rest: "hide"}, {rest: "show"});
+
+        // BULK PRIVATE FOLLOWS START #2
+        container.querySelector(".follows-bulk-private").addEventListener("click", (e) => {
+            // Hack to avoid firing twice
+            if(this.executingBulkPrivate)
+                return;
+            this.executingBulkPrivate = true;
+
+            console.log("yay", e);
+            e.stopPropagation();
+            e.preventDefault();
+
+            this.set_bulk_private();
+        });
+        // BULK PRIVATE FOLLOWS END #2
 
         var tag_list = container.querySelector(".follow-tag-list");
         for(let tag of tag_list.querySelectorAll(".following-tag"))
