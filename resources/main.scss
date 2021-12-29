@@ -39,7 +39,7 @@ html {
         overflow-y: scroll;
     }
 }
- 
+
 .ppixiv-icon {
     font-family: 'ppixiv';
     font-style: normal;
@@ -489,7 +489,7 @@ textarea:focus, input:focus, a:focus {
     position: fixed;
     bottom: 0px;
     display: flex;
-    justify-content: center;    
+    justify-content: center;
 
     & > .message {
         background-color: var(--frame-bg-color);
@@ -619,7 +619,7 @@ textarea:focus, input:focus, a:focus {
     .author {
         vertical-align: top;
     }
-    
+
     // Override the default visible-widget hiding behavior.
     &:not(.visible-widget)
     {
@@ -635,7 +635,7 @@ textarea:focus, input:focus, a:focus {
 
         // Make sure text doesn't stay selected while we're hidden.
         user-select: none;
-        
+
         // Show the UI on hover when hide-ui isn't set.  force-ui is used for debugging.
         body:not(.hide-ui) &.visible-widget,
         body.force-ui &
@@ -704,7 +704,7 @@ textarea:focus, input:focus, a:focus {
     @media(hover: hover) {
         // Highlight on hover.  If .parent-highlight is set, also highlight if the parent
         // is hovered.
-        
+
         &:hover,
         :hover > &.parent-highlight
         {
@@ -746,7 +746,7 @@ html[data-theme="light"] .whats-new-button.updates > svg {
 .avatar-widget-follow-container {
     // Set relative so we're the positioning container for the follow dropdown.
     position: relative;
-    
+
     .avatar {
         transition: filter .25s;
         display: block;
@@ -782,7 +782,7 @@ html[data-theme="light"] .whats-new-button.updates > svg {
         width: 44px;
         height: 44px;
     }
-    
+
     // Position the follow dropdown.
     .follow-box {
         position: absolute;
@@ -801,7 +801,7 @@ html[data-theme="light"] .whats-new-button.updates > svg {
         visibility: hidden;
         pointer-events: none;
     }
-    
+
     .follow-icon {
         position: absolute;
         bottom: 0;
@@ -1141,7 +1141,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
         animation-duration: 300ms;
         animation-timing-function: ease-out;
         animation-iteration-count: 1;
-    }    
+    }
 
     @keyframes flash-thumbnail {
         0% {
@@ -1225,7 +1225,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
 
             /* Show the top-center of the thunbnail.  This generally makes more sense
             * than cropping the center. */
-            object-position: 50% 0%;    
+            object-position: 50% 0%;
             width: 100%;
             height: 100%;
         }
@@ -1303,7 +1303,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
         }
 
         .show-manga-pages-button {
-            font-size: 16px;            
+            font-size: 16px;
         }
 
         // Hide the manga index button beyond the first page.
@@ -1370,7 +1370,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
                         line-height: 19px;
                     }
                 }
-                
+
                 .ugoira-icon {
                     color: #fff;
                     transition: opacity .5s;
@@ -1428,14 +1428,14 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
                     &:not(:hover) .hover {
                         display: none;
                     }
-            
+
                     .page-count {
                         vertical-align: middle;
                         padding-left: 2px;
                         margin-bottom: -4px; // hack to center correctly
                     }
                 }
-            }                
+            }
         }
 
         &.expanded-thumb .page-count {
@@ -1531,7 +1531,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
     border-radius: 2px;
 
     color: var(--box-link-fg-color);
-    user-select: none;
+    //user-select: none;
     -webkit-user-select: none;
 
     background-color: var(--box-link-bg-color);
@@ -1557,7 +1557,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
     @media(hover: hover) {
         &:hover:not(.disabled) {
             background-color: var(--box-link-hover-color);
-            &.selected { background-color: var(--box-link-selected-hover-color); }    
+            &.selected { background-color: var(--box-link-selected-hover-color); }
         }
     }
 
@@ -1597,7 +1597,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
             // all, the icon will be hidden.
             width: 1ch;
         }
-        
+
         &:not(.with-text) {
             // There's no text, so increase the size of the icon to fill the button better.
             font-size: 150%;
@@ -1810,7 +1810,7 @@ a.box-link, span.box-link
     /* Styles specific to the search history version of the dropdown: */
     .search-history > & > .input-dropdown-list {
         & > .entry .suggestion-icon {
-            margin: 2px -2px 0 2px;    
+            margin: 2px -2px 0 2px;
         }
         & > .entry:not(.autocomplete) .suggestion-icon {
             display: none;
@@ -1997,7 +1997,7 @@ a.box-link, span.box-link
                     color: var(--toggle-button-fg-color);
                 }
             }
-            
+
             &.enabled.selected {
                 background-color: var(--toggle-button-bg-color);
                 color: var(--toggle-button-fg-color);
@@ -2010,8 +2010,8 @@ a.box-link, span.box-link
 
             /* Popup menu bookmarking */
             .tag-dropdown-arrow {
-                width: 0; 
-                height: 0; 
+                width: 0;
+                height: 0;
                 border-top: 10px solid #222;
                 border-left: 10px solid transparent;
                 border-right: 10px solid transparent;
@@ -2127,7 +2127,7 @@ a.box-link, span.box-link
         &.selected {
             background-color: var(--box-link-selected-color);
         }
-        
+
         @media(hover: hover) {
             &:hover {
                 background-color: var(--box-link-hover-color);
@@ -2312,7 +2312,7 @@ a.box-link, span.box-link
         --opacity: 1;
 
         pointer-events: none;
-        
+
         // --pointer-events is "auto" if elements should receive pointer events, or "none" if
         // we're hidden.  This is applied with pointer-events: var(--pointer-events) to the correct
         // element.  We don't just do it here since we don't want the gap between the top menu to
@@ -2410,8 +2410,8 @@ a.box-link, span.box-link
 
                     /* Popup menu bookmarking */
                     .tag-dropdown-arrow {
-                        width: 0; 
-                        height: 0; 
+                        width: 0;
+                        height: 0;
                         border-top: 10px solid #222;
                         border-left: 10px solid transparent;
                         border-right: 10px solid transparent;
@@ -2477,7 +2477,7 @@ a.box-link, span.box-link
     text-align: center;
 }
 
-/* Nudge the public heart icon up a bit to make room for the bookmark count. 
+/* Nudge the public heart icon up a bit to make room for the bookmark count.
  * Only do this on the popup menu, not image-ui. */
 .popup-context-menu .button.button-bookmark.public.has-like-count > svg
 {
@@ -2582,7 +2582,7 @@ svg.heart-image .delete {
             --mouth-translate-y: -3px;
         }
     }
-    
+
     > svg {
         > * {
             transition: transform ease-in-out .15s;
@@ -2863,7 +2863,7 @@ svg.heart-image .delete {
     }
 }
 
-.tree 
+.tree
 {
     user-select: none;
     -webkit-user-select: none;
@@ -2917,7 +2917,7 @@ svg.heart-image .delete {
                 padding: 0.5em;
                 white-space: nowrap;
             }
-        
+
             &.root
             {
                 display: none;
@@ -2927,7 +2927,7 @@ svg.heart-image .delete {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                
+
                 font-size: 50%;
                 width: 3em;
                 height: 100%;
@@ -2980,7 +2980,7 @@ svg.heart-image .delete {
 
 .screen-search-container {
     --navigation-box-width: 25%;
-    --navigation-box-reserved-width: var(--navigation-box-width); 
+    --navigation-box-reserved-width: var(--navigation-box-width);
 
     // If we're not showing navigation, don't reserve space for it.  Don't change the actual
     // nav box's size, so we can transition it in and out cleanly.
@@ -3009,7 +3009,7 @@ svg.heart-image .delete {
     }
 }
 
-.tree-popup 
+.tree-popup
 {
     background-color: #222;
     color: #fff;
@@ -3107,34 +3107,34 @@ svg.heart-image .delete {
             padding: 0.5em 1em;
             gap: 1em;
         }
-    
+
         .box-link {
             // Disable some regular box-link styles:
             height: auto;
             background-color: inherit;
-        
+
             // Extra buttons (the linked tabs "edit" button):
             > .buttons > .box-link {
                 padding: 0.35em .75em;
             }
-    
+
             &.button {
                 background-color: var(--box-link-bg-color);
             }
-    
+
             @media(hover: hover) {
                 &.clickable:hover:not(.disabled) {
                     background-color: var(--box-link-hover-color);
                 }
             }
-                
+
             // If this isn't a clickable row, such as a slider, disable effects on hover.
             &:not(.clickable):hover {
                 cursor: inherit;
                 background: none;
             }
-        }            
-    
+        }
+
         // Top-level box-links inside settings pages put their explanation underneath the
         // label.
         > .box-link > .label-box {
@@ -3277,7 +3277,7 @@ svg.heart-image .delete {
             }
         }
     }
-    
+
     @keyframes spin {
         0%   { transform: rotate(0); }
         100% { transform: rotate(360deg); }
@@ -3313,7 +3313,7 @@ svg.heart-image .delete {
             outline-offset: 1px;
 
             // When editing the safe zone, dragging the middle moves the image instead of the rect, so
-            // it's easier to move the view around.  
+            // it's easier to move the view around.
             pointer-events: none;
         }
 
@@ -3367,7 +3367,7 @@ svg.heart-image .delete {
                 // stroke: #FFF;
             }
         }
-        
+
         .inpaint-line {
             fill: none;
             stroke: #f00;
