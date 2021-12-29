@@ -1352,7 +1352,7 @@ body.ui-on-hover .top-ui-box + .top-ui-box-padding
 
     color: var(--box-link-fg-color);
     background-color: var(--box-link-bg-color);
-    user-select: none;
+    //user-select: none;
     white-space: nowrap;
 
     &.disabled {
