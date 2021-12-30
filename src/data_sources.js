@@ -245,6 +245,7 @@ ppixiv.data_source = class
         this.loading_pages = {};
         this.first_empty_page = -1;
         this.update_callbacks = [];
+        this.total_ids = 0;
 
         // If this data source supports a start page, store the page we started on.
         // This isn't increased as we load more pages, but if we load earlier results
@@ -1420,6 +1421,8 @@ ppixiv.data_sources.artist = class extends data_source
             if(this.pages == null)
             {
                 let all_illust_ids = await this.load_all_results();
+
+                this.total_ids = all_illust_ids.length;
                 this.pages = paginate_illust_ids(all_illust_ids, this.estimated_items_per_page);
             }
 
@@ -2702,6 +2705,8 @@ ppixiv.data_sources.search = class extends data_source
         // /tag/TAG/artworks returns results in body.illustManga.
         // /tag/TAG/manga returns results in body.manga.
         let illusts = body.illust || body.illustManga || body.manga;
+
+        this.total_ids = illusts.total;
         illusts = illusts.data;
 
         // Populate thumbnail data with this data.
