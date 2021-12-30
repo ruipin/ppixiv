@@ -143,7 +143,7 @@ class illust_id_list
             return this.get_first_id();
 
         // If we're navigating forwards, grab thumbnail info to get the page count to
-        // see if we're at the end. 
+        // see if we're at the end.
         let id = helpers.parse_media_id(media_id);
         if(id.type == "illust" && !skip_manga_pages)
         {
@@ -307,6 +307,7 @@ ppixiv.data_source = class
         this.loaded_pages = {};
         this.first_empty_page = -1;
         this.update_callbacks = [];
+        this.total_ids = 0;
 
         // If this data source supports a start page, store the page we started on.
         // This isn't increased as we load more pages, but if we load earlier results
@@ -314,7 +315,7 @@ ppixiv.data_source = class
         if(this.supports_start_page)
         {
             let args = new helpers.args(url);
-            
+
             this.initial_page = this.get_start_page(args);
             console.log("Starting at page", this.initial_page);
         }
@@ -325,7 +326,7 @@ ppixiv.data_source = class
     // If a data source returns a name, we'll display any .data-source-specific elements in
     // the thumbnail view with that name.
     get name() { return null; }
-    
+
     // Most data sources are for illustrations.  This is set to "users" for the followed view.
     get search_mode() { return "illusts"; }
 
@@ -395,7 +396,7 @@ ppixiv.data_source = class
 
     // startup() is called when the data source becomes active, and shutdown is called when
     // it's done.  This can be used to add and remove event handlers on the UI.
-    startup() 
+    startup()
     {
         this.active = true;
     }
@@ -486,11 +487,11 @@ ppixiv.data_source = class
         // If the page is already loaded, stop.
         if(this.id_list.is_page_loaded(page))
             return true;
-        
+
         // Check if this is past the end.
         if(!this.load_page_available(page))
             return false;
-        
+
         console.log("Load page", page, "for:", cause);
 
         // Before starting, await at least once so we get pushed to the event loop.  This
@@ -531,7 +532,7 @@ ppixiv.data_source = class
         let args = helpers.args.location;
         if(args.hash.has("illust_id"))
             return helpers.illust_id_to_media_id(args.hash.get("illust_id"));
-        
+
         return this.id_list.get_first_id();
     };
 
@@ -824,7 +825,7 @@ ppixiv.data_source = class
 
         link.href = url.toString();
     };
-    
+
     // Set the active class on all top-level dropdowns which have something other than
     // the default selected.
     set_active_popup_highlight(container)
@@ -1028,7 +1029,7 @@ ppixiv.data_sources.discovery = class extends data_source
 ppixiv.data_sources.related_illusts = class extends data_source
 {
     get name() { return "related-illusts"; }
-   
+
     get estimated_items_per_page() { return 60; }
 
     async _load_page_async(page, cause)
@@ -1052,7 +1053,7 @@ ppixiv.data_sources.related_illusts = class extends data_source
 
         return await super._load_page_async(page, cause);
     }
-     
+
     async load_page_internal(page)
     {
         // Get "mode" from the URL.  If it's not present, use "all".
@@ -1124,7 +1125,7 @@ ppixiv.data_sources.discovery_users = class extends data_source
         let illusts_per_user = this.showing_user_id != null? 3:5;
         return this.users_per_page + (users_per_page * illusts_per_user);
     }
-    
+
     async load_page_internal(page)
     {
         if(this.showing_user_id != null)
@@ -1135,7 +1136,7 @@ ppixiv.data_sources.discovery_users = class extends data_source
             // Update to refresh our page title, which uses user_info.
             this.call_update_listeners();
         }
- 
+
         // Get suggestions.  Each entry is a user, and contains info about a small selection of
         // images.
         let result;
@@ -1186,7 +1187,7 @@ ppixiv.data_sources.discovery_users = class extends data_source
             this.seen_user_ids[user.userId] = true;
 
             media_ids.push("user:" + user.userId);
-            
+
             let illustIds = user.illustIds || user.recentIllustIds;
             for(let illust_id of illustIds)
                 media_ids.push(helpers.illust_id_to_media_id(illust_id));
@@ -1217,7 +1218,7 @@ ppixiv.data_sources.discovery_users = class extends data_source
         else
             return "Loading...";
     }
-    
+
     get_displaying_text()
     {
         if(this.showing_user_id == null)
@@ -1251,7 +1252,7 @@ ppixiv.data_sources.rankings = class extends data_source
 
         this.max_page = 999999;
     }
-    
+
     get name() { return "rankings"; }
 
     load_page_available(page)
@@ -1271,12 +1272,12 @@ ppixiv.data_sources.rankings = class extends data_source
         "date": "20180923",
         "prev_date": "20180922",
         "next_date": false,
-        "rank_total": 500        
+        "rank_total": 500
         */
 
         // Get "mode" from the URL.  If it's not present, use "all".
         var query_args = this.url.searchParams;
-        
+
         var data = {
             format: "json",
             p: page,
@@ -1320,7 +1321,7 @@ ppixiv.data_sources.rankings = class extends data_source
             this.prev_date = result.prev_date;
         if(this.next_date == null && result.next_date)
             this.next_date = result.next_date;
-    
+
         // This returns a struct of data that's like the thumbnails data response,
         // but it's not quite the same.
         var media_ids = [];
@@ -1329,7 +1330,7 @@ ppixiv.data_sources.rankings = class extends data_source
 
         // Register this as thumbnail data.
         thumbnail_data.singleton().loaded_thumbnail_info(result.contents, "rankings");
-        
+
         // Register the new page of data.
         this.add_page(page, media_ids);
     };
@@ -1342,7 +1343,7 @@ ppixiv.data_sources.rankings = class extends data_source
     refresh_thumbnail_ui(container)
     {
         var query_args = this.url.searchParams;
-        
+
         this.set_item(container, "content-all", {content: null});
         this.set_item(container, "content-illust", {content: "illust"});
         this.set_item(container, "content-ugoira", {content: "ugoira"});
@@ -1511,7 +1512,7 @@ class data_source_from_page extends data_source
 
 // - User illustrations
 //
-// /users/# 
+// /users/#
 // /users/#/artworks
 // /users/#/illustrations
 // /users/#/manga
@@ -1520,7 +1521,7 @@ class data_source_from_page extends data_source
 ppixiv.data_sources.artist = class extends data_source
 {
     get name() { return "artist"; }
-  
+
     constructor(url)
     {
         super(url);
@@ -1559,7 +1560,7 @@ ppixiv.data_sources.artist = class extends data_source
         this.src_observer.disconnect();
         this.src_observer = null;
     }
-    
+
     // Return "artworks" (all), "illustrations" or "manga".
     get viewing_type()
     {
@@ -1582,7 +1583,7 @@ ppixiv.data_sources.artist = class extends data_source
     async load_page_internal(page)
     {
         let viewing_type = this.type;
-        
+
         // Make sure the user info is loaded.  This should normally be preloaded by globalInitData
         // in main.js, and this won't make a request.
         this.user_info = await image_data.singleton().get_user_info_full(this.viewing_user_id);
@@ -1602,6 +1603,8 @@ ppixiv.data_sources.artist = class extends data_source
             if(this.pages == null)
             {
                 let all_media_ids = await this.load_all_results();
+
+                this.total_ids = all_media_ids.length;
                 this.pages = paginate_illust_ids(all_media_ids, this.estimated_items_per_page);
             }
 
@@ -1625,7 +1628,7 @@ ppixiv.data_sources.artist = class extends data_source
                     work_category: "illustManga",
                     is_first_page: "0",
                 });
-                
+
                 let illusts = Object.values(result.body.works);
                 thumbnail_data.singleton().loaded_thumbnail_info(illusts, "normal");
             }
@@ -1669,7 +1672,7 @@ ppixiv.data_sources.artist = class extends data_source
 
             var media_ids = [];
             for(var illust_data of result.body.works)
-                media_ids.push(helpers.illust_id_to_media_id(illust_data.id)); 
+                media_ids.push(helpers.illust_id_to_media_id(illust_data.id));
 
             // This request returns all of the thumbnail data we need.  Forward it to
             // thumbnail_data so we don't need to look it up.
@@ -1679,7 +1682,7 @@ ppixiv.data_sources.artist = class extends data_source
             this.add_page(page, media_ids);
         }
     }
-    
+
     add_extra_links(links)
     {
         // Add the Fanbox link to the list if we have one.
@@ -1774,10 +1777,10 @@ ppixiv.data_sources.artist = class extends data_source
         // Refresh the post tag list.
         var query_args = this.url.searchParams;
         var current_query = query_args.toString();
-        
+
         var tag_list = container.querySelector(".post-tag-list");
         helpers.remove_elements(tag_list);
-        
+
         var add_tag_link = (tag_info) =>
         {
             // Skip tags with very few posts.  This list includes every tag the author
@@ -1987,7 +1990,7 @@ ppixiv.data_sources.current_illust = class extends data_source
 class data_source_bookmarks_base extends data_source
 {
     get name() { return "bookmarks"; }
-  
+
     constructor(url)
     {
         super(url);
@@ -2001,7 +2004,7 @@ class data_source_bookmarks_base extends data_source
     async load_page_internal(page)
     {
         this.fetch_bookmark_tag_counts();
-        
+
         // Load the user's info.  We don't need to wait for this to finish.
         let user_info_promise = image_data.singleton().get_user_info_full(this.viewing_user_id);
         user_info_promise.then((user_info) => {
@@ -2047,7 +2050,7 @@ class data_source_bookmarks_base extends data_source
         // If we have cached bookmark counts for ourself, load them.
         if(this.viewing_own_bookmarks() && data_source_bookmarks_base.cached_bookmark_tag_counts != null)
             this.load_bookmark_tag_counts(data_source_bookmarks_base.cached_bookmark_tag_counts);
-        
+
         // Fetch bookmark tags.  We can do this in parallel with everything else.
         var url = "/ajax/user/" + this.viewing_user_id + "/illusts/bookmark/tags";
         var result = await helpers.get_request(url, {});
@@ -2082,7 +2085,7 @@ class data_source_bookmarks_base extends data_source
                 // Rename "未分類" (uncategorized) to "".
                 if(tag == "未分類")
                     tag = "";
-                
+
                 if(tags[tag] == null)
                     tags[tag] = 0;
 
@@ -2125,7 +2128,7 @@ class data_source_bookmarks_base extends data_source
         // Update the UI with the tag list.
         this.call_update_listeners();
     }
-    
+
     // Get API arguments to query bookmarks.
     //
     // If force_rest isn't null, it's either "show" (public) or "hide" (private), which
@@ -2272,7 +2275,7 @@ class data_source_bookmarks_base extends data_source
 
         var tag_list = container.querySelector(".bookmark-tag-list");
         let current_tag = this.displaying_tag;
-        
+
         for(let tag of tag_list.querySelectorAll(".following-tag"))
             tag.remove();
 
@@ -2436,12 +2439,12 @@ ppixiv.data_sources.bookmarks = class extends data_source_bookmarks_base
 
         var media_ids = [];
         for(let illust_data of result.works)
-            media_ids.push(helpers.illust_id_to_media_id(illust_data.id)); 
+            media_ids.push(helpers.illust_id_to_media_id(illust_data.id));
 
         // If we're shuffling, shuffle the individual illustrations too.
         if(this.shuffle)
             helpers.shuffle_array(media_ids);
-        
+
         // This request returns all of the thumbnail data we need.  Forward it to
         // thumbnail_data so we don't need to look it up.
         thumbnail_data.singleton().loaded_thumbnail_info(result.works, "normal");
@@ -2487,7 +2490,7 @@ ppixiv.data_sources.bookmarks_merged = class extends data_source_bookmarks_base
         for(var i = 0; i < 2; ++i)
             if(this.bookmark_illust_ids[i] != null && this.bookmark_illust_ids[i][page] != null)
                 media_ids = media_ids.concat(this.bookmark_illust_ids[i][page]);
-        
+
         this.add_page(page, media_ids);
 
         // Combine the two totals.
@@ -2562,7 +2565,7 @@ ppixiv.data_sources.new_illust = class extends data_source
         // new_illust.php or new_illust_r18.php:
         let r18 = this.url.pathname == "/new_illust_r18.php";
         var type = args.query.get("type") || "illust";
-        
+
         // Everything Pixiv does has always been based on page numbers, but this one uses starting IDs.
         // That's a better way (avoids duplicates when moving forward in the list), but it's inconsistent
         // with everything else.  We usually load from page 1 upwards.  If we're loading the next page and
@@ -2611,7 +2614,7 @@ ppixiv.data_sources.new_illust = class extends data_source
         // Register the new page of data.
         this.add_page(page, media_ids);
     }
-    
+
     refresh_thumbnail_ui(container)
     {
         this.set_item(container, "new-illust-type-illust", {type: null});
@@ -2679,7 +2682,7 @@ ppixiv.data_sources.bookmarks_new_illust = class extends data_source
         // Register the new page of data.
         this.add_page(page, media_ids);
     }
-    
+
     get page_title()
     {
         return "Following";
@@ -2743,29 +2746,29 @@ ppixiv.data_sources.bookmarks_new_illust = class extends data_source
 // /tags
 //
 // The new tag search UI is a bewildering mess:
-// 
+//
 // - Searching for a tag goes to "/tags/TAG/artworks".  This searches all posts with the
 // tag.  The API query is "/ajax/search/artworks/TAG".  The "top" tab is highlighted, but
 // it's not actually on that tab and no tab button goes back here.  "Illustrations, Manga,
 // Ugoira" in search options also goes here.
-// 
+//
 // - The "Illustrations" tab goes to "/tags/TAG/illustrations".  The API is
 // "/ajax/search/illustrations/TAG?type=illust_and_ugoira".  This is almost identical to
 // "artworks", but excludes posts marked as manga.  "Illustrations, Ugoira"  in search
 // options also goes here.
-// 
+//
 // - Clicking "manga" goes to "/tags/TAG/manga".  The API is "/ajax/search/manga" and also
 // sets type=manga.  This is "Manga" in the search options.  This page is also useless.
 //
 // The "manga only" and "exclude manga" pages are useless, since Pixiv doesn't make any
 // useful distinction between "manga" and "illustrations with more than one page".  We
 // only include them for completeness.
-// 
+//
 // - You can search for just animations, but there's no button for it in the UI.  You
 // have to pick it from the dropdown in search options.  This one is "illustrations?type=ugoira".
 // Why did they keep using type just for one search mode?  Saying "type=manga" or any
 // other type fails, so it really is just used for this.
-// 
+//
 // - Clicking "Top" goes to "/tags/TAG" with no type.  This is a completely different
 // page and API, "/ajax/search/top/TAG".  It doesn't actually seem to be a rankings
 // page and just shows the same thing as the others with a different layout, so we
@@ -2838,7 +2841,7 @@ ppixiv.data_sources.search = class extends data_source
                 // Force "or" lowercase.
                 if(tag.toLowerCase() == "or")
                     tag = "or";
-                
+
                 var span = document.createElement("span");
                 span.innerText = tag;
                 span.classList.add("word");
@@ -2848,14 +2851,14 @@ ppixiv.data_sources.search = class extends data_source
                     span.classList.add("paren");
                 else
                     span.classList.add("tag");
-                
+
                 tag_list.appendChild(span);
             }
 
             this.title += tags.join(" ");
             this.displaying_tags = tag_list;
         }
-        
+
         // Update our page title.
         this.call_update_listeners();
     }
@@ -2933,6 +2936,8 @@ ppixiv.data_sources.search = class extends data_source
         // /tag/TAG/artworks returns results in body.illustManga.
         // /tag/TAG/manga returns results in body.manga.
         let illusts = body.illust || body.illustManga || body.manga;
+
+        this.total_ids = illusts.total;
         illusts = illusts.data;
 
         // Populate thumbnail data with this data.
@@ -2980,7 +2985,7 @@ ppixiv.data_sources.search = class extends data_source
             // If there's no parameter, show everything.
             return "all";
         }
-        
+
         if(search_type == "artworks")
             return "all";
         if(search_type == "manga")
@@ -3016,7 +3021,7 @@ ppixiv.data_sources.search = class extends data_source
         url.pathname = parts.join("/");
         return url;
     }
- 
+
     refresh_thumbnail_ui(container, thumbnail_view)
     {
         if(this.related_tags)
@@ -3068,7 +3073,7 @@ ppixiv.data_sources.search = class extends data_source
         this.set_item(container, "aspect-ratio-landscape", {ratio: "0.5"});
         this.set_item(container, "aspect-ratio-portrait", {ratio: "-0.5"});
         this.set_item(container, "aspect-ratio-square", {ratio: "0"});
-       
+
         this.set_item(container, "bookmarks-all", {blt: null, bgt: null});
         this.set_item(container, "bookmarks-5000", {blt: 5000, bgt: null});
         this.set_item(container, "bookmarks-2500", {blt: 2500, bgt: null});
@@ -3135,7 +3140,7 @@ ppixiv.data_sources.follows = class extends data_source
 {
     get name() { return "following"; }
     get search_mode() { return "users"; }
-  
+
     constructor(url)
     {
         super(url);
@@ -3155,13 +3160,13 @@ ppixiv.data_sources.follows = class extends data_source
             // New URLs (/users/13245/follows)
             return helpers.get_path_part(this.url, 1);
         }
-        
+
         var query_args = this.url.searchParams;
         let user_id = query_args.get("id");
         if(user_id == null)
 
             return window.global_data.user_id;
-        
+
         return user_id;
     };
 
@@ -3234,7 +3239,7 @@ ppixiv.data_sources.follows = class extends data_source
             thumbnail_view.avatar_container.hidden = false;
             thumbnail_view.avatar_widget.set_user_id(this.viewing_user_id);
         }
-        
+
         // The public/private button only makes sense when viewing your own follows.
         var public_private_button_container = container.querySelector(".follows-public-private");
         public_private_button_container.hidden = !this.viewing_self;
@@ -3322,7 +3327,7 @@ ppixiv.data_sources.related_favorites = class extends data_source_from_page
 {
     get name() { return "illust-bookmarks"; }
     get search_mode() { return "users"; }
-  
+
     constructor(url)
     {
         super(url);
@@ -3337,7 +3342,7 @@ ppixiv.data_sources.related_favorites = class extends data_source_from_page
         var illust_id = query_args.get("illust_id");
         let media_id = helpers.illust_id_to_media_id(illust_id)
         this.illust_info = await image_data.singleton().get_media_info(media_id);
-        
+
         return super.load_page_internal(page);
     }
 
@@ -3365,7 +3370,7 @@ ppixiv.data_sources.related_favorites = class extends data_source_from_page
         }
         return ids;
     }
-    
+
     refresh_thumbnail_ui(container, thumbnail_view)
     {
         // Set the source image.
@@ -3398,7 +3403,7 @@ ppixiv.data_sources.search_users = class extends data_source_from_page
 {
     get name() { return "search-users"; }
     get search_mode() { return "users"; }
-  
+
     parse_document(doc)
     {
         var illust_ids = [];
@@ -3443,7 +3448,7 @@ ppixiv.data_sources.search_users = class extends data_source_from_page
 ppixiv.data_sources.completed_requests = class extends data_source
 {
     get name() { return "completed-requests"; }
-  
+
     get supports_start_page()
     {
         return true;
@@ -3468,7 +3473,7 @@ ppixiv.data_sources.completed_requests = class extends data_source
         let request_data = {};
         for(let request of result.body.requests)
             request_data[request.requestId] = request;
-        
+
         for(let user of result.body.users)
             image_data.singleton().add_user_data(user);
 
@@ -3553,7 +3558,7 @@ ppixiv.data_sources.recent = class extends data_source
 
     // This data source is transient, so it's recreated each time the user navigates to it.
     get transient() { return true; }
-    
+
     refresh_thumbnail_ui(container)
     {
         // Set .selected on the current mode.
@@ -3596,7 +3601,7 @@ ppixiv.data_sources.vview = class extends data_source
             return;
 
         this.fetch_bookmark_tag_counts();
-        
+
         // We should only be called in one of three ways: a start page (any page, but only if we have
         // nothing loaded), or a page at the start or end of pages we've already loaded.  Figure out which
         // one this is.  "page" is set to result.next of the last page to load the next page, or result.prev
@@ -3627,7 +3632,7 @@ ppixiv.data_sources.vview = class extends data_source
             console.log(`Loaded unexpected page ${page} (${lowest_page}...${highest_page})`);
             return;
         }
-    
+
         if(this.next_page_offset == null)
         {
             // We haven't loaded any pages yet, so we can't resume the search in-place.  Set next_page_offset
@@ -3665,9 +3670,9 @@ ppixiv.data_sources.vview = class extends data_source
                 message_widget.singleton.show("Error reading directory: " + result.reason);
                 return result;
             }
-    
+
             this.reached_end = true;
-            this._all_pages_loaded = true;            
+            this._all_pages_loaded = true;
             this.add_page(page, result_ids.ids);
             return;
         }
@@ -3780,7 +3785,7 @@ ppixiv.data_sources.vview = class extends data_source
         illust_id = local_api.get_local_id_from_args(args);
         if(illust_id != null)
             return illust_id;
-        
+
         return this.id_list.get_first_id();
     }
 

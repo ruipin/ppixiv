@@ -892,6 +892,14 @@ ppixiv.screen_search = class extends ppixiv.screen
                 helpers.remove_elements(element_displaying);
                 element_displaying.appendChild(text);
             }
+
+            const total_ids = this.data_source.total_ids;
+            if(typeof total_ids === "number" && total_ids > 0) {
+                const span = document.createElement("div");
+                span.innerText = "Found " + this.data_source.total_ids + " illustrations.";
+                span.classList.add("small-font");
+                element_displaying.appendChild(span);
+            }
         }
 
         this.data_source.set_page_icon();
