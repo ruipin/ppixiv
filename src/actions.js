@@ -420,7 +420,7 @@ ppixiv.actions = class
 
         // Create the ZIP.
         var zip = new create_zip(filenames, results);
-        var filename = user_info.name + " - " + illust_data.illustId + " - " + illust_data.illustTitle + ".zip";
+        var filename = user_info.name + " - " + illust_data.illustId + " - " + illust_data.illustTitle + ".cbz";
         helpers.save_blob(zip, filename);
     }
 
