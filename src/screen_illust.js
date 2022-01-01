@@ -505,7 +505,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.navigate_to_next(false, { skip_manga_pages: e.shiftKey });
+            this.navigate_to_next(false, { skip_manga_pages: e.keyCode == 37 || e.shiftKey });
             break;
 
         case 39: // right
@@ -514,7 +514,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.navigate_to_next(true, { skip_manga_pages: e.shiftKey });
+            this.navigate_to_next(true, { skip_manga_pages: e.keyCode == 39 || e.shiftKey });
             break;
         }
     }
