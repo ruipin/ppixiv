@@ -44,6 +44,12 @@ ppixiv.on_click_viewer = class
         this.center_pos = [0, 0];
         this.drag_movement = [0,0];
 
+        // Seek bar
+        this.seek_bar = document.createElement("div");
+        this.seek_bar.classList.add("seek-bar-container");
+        this.seek_bar.style.marginTop = "-12px";
+        this.image_container.appendChild(this.seek_bar);
+
         // Restore the most recent zoom mode.  We assume that there's only one of these on screen.
         this.locked_zoom = settings.get("zoom-mode") == "locked";
         this._zoom_level = settings.get("zoom-level", "cover");

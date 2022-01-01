@@ -13,6 +13,7 @@ ppixiv.viewer_images = class extends ppixiv.viewer
         });
 
         this.manga_page_bar = options.manga_page_bar;
+
         this.onkeydown = this.onkeydown.bind(this);
         this.restore_history = false;
 
@@ -36,6 +37,15 @@ ppixiv.viewer_images = class extends ppixiv.viewer
         });
 
         main_context_menu.get.on_click_viewer = this.on_click_viewer;
+
+        // Add the seek bar.
+        this.seek_bar = new seek_bar({
+            container: this.container.querySelector(".seek-bar-container"),
+            parent: this,
+        });
+        this.seek_bar.is_video = false;
+        this.seek_bar.set_current_time(0);
+        this.seek_bar.set_duration(1);
     }
 
     async load(signal,
@@ -157,6 +167,12 @@ ppixiv.viewer_images = class extends ppixiv.viewer
             this.image_editor = null;
         }
 
+        if(this.seek_bar)
+        {
+            this.seek_bar.set_callback(null);
+            this.seek_bar = null;
+        }
+
         main_context_menu.get.on_click_viewer = null;
     }
 
@@ -206,10 +222,20 @@ ppixiv.viewer_images = class extends ppixiv.viewer
         // If we have a manga_page_bar, update to show the current page.
         if(this.manga_page_bar)
         {
-            if(this.images.length == 1)
+            if(this.images.length == 1) {
                 this.manga_page_bar.set(null);
-            else
-                this.manga_page_bar.set((this._page+1) / this.images.length);
+                this.seek_bar.set_callback(null);
+            }
+            else {
+                const current = this._page;
+                const total = this.images.length-1;
+                const progress = current /total;
+
+                this.manga_page_bar.set(current / total);
+                this.seek_bar.set_current_time(current);
+                this.seek_bar.set_duration(total);
+                this.seek_bar.set_callback((...args) => this.seek_callback.apply(this, args));
+            }
         }
     }
 
@@ -237,4 +263,11 @@ ppixiv.viewer_images = class extends ppixiv.viewer
             return;
         }
     }
+
+    // This is called when the user interacts with the seek bar.
+    seek_callback(pause, position)
+    {
+        if(position != null)
+            this.page = Math.round(position);
+    };
 }

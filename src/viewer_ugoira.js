@@ -26,6 +26,7 @@ ppixiv.viewer_ugoira = class extends ppixiv.viewer
         this.load = new SentinelGuard(this.load, this);
 
         this.seek_bar = this.video_ui.seek_bar;
+        this.seek_bar.is_video = true;
         this.seek_bar.set_current_time(0);
         this.seek_bar.set_callback(this.seek_callback);
 

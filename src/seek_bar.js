@@ -11,6 +11,7 @@ ppixiv.seek_bar = class extends widget
                         <div data-seek-part=empty class=seek-empty></div>
                         <div data-seek-part=loaded class=seek-loaded></div>
                         <div data-seek-part=fill class=seek-fill></div>
+                        <div data-seek-part=text class=seek-text></div>
                     </div>
                 </div>
             `
@@ -25,6 +26,7 @@ ppixiv.seek_bar = class extends widget
         this.current_time = 0;
         this.duration = 1;
         this.amount_loaded = 1;
+        this.is_video = true;
         this.refresh();
         this.set_callback(null);
     };
@@ -128,10 +130,14 @@ ppixiv.seek_bar = class extends widget
 
     refresh()
     {
-        let position = this.duration > 0.0001? (this.current_time / this.duration):0;
+        const position = this.duration > 0.0001? (this.current_time / this.duration):0;
         this.container.querySelector(".seek-fill").style.width = (position * 100) + "%";
 
-        let loaded = this.amount_loaded < 1? this.amount_loaded:0;
+        const textDuration = this.is_video ? this.duration.toFixed(2) : this.duration + 1;
+        const textPosition = this.is_video ? this.current_time.toFixed(2) : this.current_time + 1;
+        this.container.querySelector(".seek-text").innerText = textPosition + " / " + textDuration;
+
+        const loaded = this.amount_loaded < 1? this.amount_loaded:0;
         this.container.querySelector(".seek-loaded").style.width = (loaded * 100) + "%";
     };
 }
