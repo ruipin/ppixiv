@@ -553,7 +553,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.navigate_to_next(false, { manga: e.shiftKey? "skip-to-first":"normal" });
+            this.navigate_to_next(false, { manga: (e.keyCode == 37 || e.shiftKey) ? "skip-to-first":"normal" });
             break;
 
         case "ArrowRight":
@@ -562,7 +562,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.navigate_to_next(true, { manga: e.shiftKey? "skip-to-first":"normal" });
+            this.navigate_to_next(true, { manga: (e.keyCode == 39 || e.shiftKey) ? "skip-to-first":"normal" });
             break;
         }
     }
