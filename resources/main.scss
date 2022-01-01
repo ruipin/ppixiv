@@ -187,14 +187,14 @@ textarea:focus, input:focus, a:focus {
         height: 100%;
     }
 
-    .seek-empty {
+    /*.seek-empty {
         transition: transform .25s;
         transform: translate(0, 12px);
-    }
+    }*/
 
     /* Hide the seek bar by default (move down by 12px).  Show it when the mouse is visible
      * or .visible is set (move down by 6px).  Expand it while dragging (0px). */
-    .mouse-hidden-box.show-cursor &         .seek-empty,
+    /*.mouse-hidden-box.show-cursor &         .seek-empty,
                                   &.visible .seek-empty
     {
         transform: translate(0, 6px);
@@ -202,6 +202,14 @@ textarea:focus, input:focus, a:focus {
 
     &.dragging .seek-empty {
         transform: translate(0, 0);
+    }*/
+
+    .seek-text {
+        margin-top: -15px;
+        font-size: 14px;
+        text-align: center;
+        color: white;
+        text-shadow: 0 0 2px black;
     }
 }
 

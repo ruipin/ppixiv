@@ -17,6 +17,8 @@ ppixiv.seek_bar = class
                 <div class=seek-empty> \
                     <div class=seek-fill></div> \
                 </div> \
+                <div class=seek-text> \
+                </div> \
             </div> \
         '));
 
@@ -26,6 +28,8 @@ ppixiv.seek_bar = class
 
         this.current_time = 0;
         this.duration = 1;
+        this.is_video = true;
+
         this.refresh_visibility();
         this.refresh();
         this.set_callback(null);
@@ -151,8 +155,12 @@ ppixiv.seek_bar = class
 
     refresh()
     {
-        var position = this.duration > 0.0001? (this.current_time / this.duration):0;
+        const position = this.duration > 0.0001? (this.current_time / this.duration):0;
         this.bar.querySelector(".seek-fill").style.width = (position * 100) + "%";
+
+        const textDuration = this.is_video ? this.duration.toFixed(2) : this.duration + 1;
+        const textPosition = this.is_video ? this.current_time.toFixed(2) : this.current_time + 1;
+        this.bar.querySelector(".seek-text").innerText = textPosition + " / " + textDuration;
     };
 }
 
