@@ -3,5 +3,6 @@
     "scss.lint.emptyRules": "ignore",
     "explorer.excludeGitIgnore": true,
     "search.useGlobalIgnoreFiles": true,
-    "search.useParentIgnoreFiles": true
+    "search.useParentIgnoreFiles": true,
+    "files.trimTrailingWhitespace": false
 }
