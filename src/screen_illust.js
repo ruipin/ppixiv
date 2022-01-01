@@ -501,7 +501,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.move(false, e.shiftKey /* skip_manga_pages */);
+            this.move(false, e.keyCode == 37 || e.shiftKey /* skip_manga_pages */);
             break;
 
         case 39: // right
@@ -510,7 +510,7 @@ ppixiv.screen_illust = class extends ppixiv.screen
             e.preventDefault();
             e.stopPropagation();
 
-            this.move(true, e.shiftKey /* skip_manga_pages */);
+            this.move(true, e.keyCode == 39 || e.shiftKey /* skip_manga_pages */);
             break;
         }
     }
