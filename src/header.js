@@ -11,5 +11,6 @@
 // @grant       GM_getValue
 // @connect     pixiv.net
 // @connect     i.pximg.net
+// @connect     i-cf.pximg.net
 // @connect     self
 // @namespace   ppixiv

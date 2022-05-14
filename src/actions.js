@@ -399,7 +399,7 @@ ppixiv.actions = class
         for(let page of illust_data.mangaPages)
         {
             let url = page.urls.original;
-            url = url.replace(/:\/\/i-cf.pximg.net/, "://i.pximg.net");
+            //url = url.replace(/:\/\/i-cf.pximg.net/, "://i.pximg.net");
             images.push(url);
         }
 

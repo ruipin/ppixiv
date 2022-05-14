@@ -995,8 +995,8 @@ ppixiv.helpers = {
             // We use i-cf for image URLs, but we don't currently have this in @connect,
             // so we can't use that here.  Switch from i-cf back to the original URLs.
             url = new URL(url);
-            if(url.hostname == "i-cf.pximg.net")
-                url.hostname = "i.pximg.net";
+            //if(url.hostname == "i-cf.pximg.net")
+            //    url.hostname = "i.pximg.net";
 
             GM_xmlhttpRequest({
                 "method": "GET",
@@ -2348,8 +2348,8 @@ ppixiv.helpers = {
 
     adjust_image_url_hostname(url)
     {
-        if(url.hostname == "i.pximg.net")
-            url.hostname = "i-cf.pximg.net";
+        //if(url.hostname == "i.pximg.net")
+        //    url.hostname = "i-cf.pximg.net";
     },
 
     // Given a low-res thumbnail URL from thumbnail data, return a high-res thumbnail URL.
